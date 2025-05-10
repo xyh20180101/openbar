@@ -1,0 +1,26 @@
+.n-card {
+    width: 60%;
+    max-width: 600px;
+    min-width: 200px;
+}
+
+.n-card>.n-card__content {
+    padding: 12px 12px !important;
+}
+
+.n-form-item-feedback-wrapper {
+    min-height: 12px !important;
+}
+
+.n-card__footer {
+    padding: 12px !important;
+}
+
+.n-divider {
+    margin: 0px 0 !important;
+}
+
+.n-list.n-list--bordered .n-list-item,
+.n-list.n-list--hoverable .n-list-item {
+    padding: 8px;
+}
