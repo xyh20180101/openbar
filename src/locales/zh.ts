@@ -80,6 +80,9 @@ export default {
       buttonDisplay: '按钮显示',
       showIcon: '显示图标',
       showText: '显示文本',
+      show1: '显示前1个字',
+      show2: '显示前2个字',
+      showAll: '显示全部',
       buttonStyle: '按钮样式',
       sample: '示例',
       buttonShape: '按钮形状',
@@ -92,7 +95,12 @@ export default {
       backup: '备份',
       openDirectory: '打开openbar目录',
       collectFiles: '收集文件',
-      collectFilesHint: '将引用的预设收集到openbar目录下，预设按钮的引用也会随之更改'
+      collectFilesHint: '将引用的预设收集到openbar目录下，预设按钮的引用也会随之更改',
+      update: '更新',
+      isUpdate: '检测到新版本，是否前往下载？',
+      isNoUpdate: '已经是最新版本',
+      confirm: '确认',
+      cancel: '取消'
     },
     about: {
       title: '关于'

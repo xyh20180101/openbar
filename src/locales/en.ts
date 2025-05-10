@@ -80,6 +80,9 @@ export default {
       buttonDisplay: 'Button display',
       showIcon: 'Show icon',
       showText: 'Show text',
+      show1: 'Show 1st',
+      show2: 'Show 1st 2',
+      showAll: 'Show all',
       buttonStyle: 'Button style',
       sample: 'sample',
       buttonShape: 'Button shape',
@@ -92,7 +95,12 @@ export default {
       backup: 'Backup',
       openDirectory: 'Open openbar directory',
       collectFiles: 'Collect files',
-      collectFilesHint: 'Collect the referenced preset files into the openbar directory, and the references in the preset buttons will be updated accordingly'
+      collectFilesHint: 'Collect the referenced preset files into the openbar directory, and the references in the preset buttons will be updated accordingly',
+      update: 'Update',
+      isUpdate: 'A new version is available. Would you like to go download it?',
+      isNoUpdate: 'You\'re using the latest version.',
+      confirm: 'Confirm',
+      cancel: 'Cancel'
     },
     about: {
       title: 'About'

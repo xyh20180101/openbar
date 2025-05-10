@@ -2,7 +2,7 @@
 import pkg from '../../../package.json'
 import { onBeforeMount, ref, h, watch, computed } from 'vue';
 import { openBarHelper } from '../lib/openBarHelper'
-import { darkTheme, NConfigProvider, NModalProvider, NScrollbar, NIcon, NTabs, NTabPane, NButton, NTree, TreeOption, NPopconfirm, NModal, NDropdown, NSelect, NTag, NCheckbox, NRadioGroup, NRadio, NDivider, NColorPicker, TreeDropInfo, NSlider, NPopover } from 'naive-ui'
+import { darkTheme, NConfigProvider, NModalProvider, NScrollbar, NIcon, NTabs, NTabPane, NButton, NTree, TreeOption, NPopconfirm, NModal, NDropdown, NSelect, NTag, NCheckbox, NRadioGroup, NRadio, NDivider, NColorPicker, TreeDropInfo, NSlider, NPopover, NDialog } from 'naive-ui'
 import { v4 as uuidv4 } from 'uuid';
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiPlus, mdiSquareEditOutline, mdiEye, mdiTrashCanOutline } from '@mdi/js'
@@ -66,6 +66,8 @@ const buttonSizeString = computed(() => {
     case 4: return 'large'
   }
 })
+const showUpdate = ref(false)
+const showNoUpdate = ref(false)
 
 const renderLabel = ({ option }: { option: any }) => {
   switch (option.type) {
@@ -385,9 +387,33 @@ const collectFiles = () => {
 
   evalTS('copyFiles', []).then(result => console.log(result))
 }
-const openGitHubRepo = () => {
-  openLinkInBrowser('https://github.com/xyh20180101/openbar');
-};
+
+const checkUpdate = () => {
+  fetch('https://api.github.com/repos/xyh20180101/openbar/releases/latest').then(response => response.json())
+    .then(data => {
+      const githubVersion = data.tag_name
+      const currentVersion = pkg.version
+      if (compareVersions(githubVersion, currentVersion) > 0) {
+        showUpdate.value = true
+      }
+      else {
+        showNoUpdate.value = true
+      }
+    })
+}
+
+function compareVersions(v1, v2) {
+  const a = v1.split('.').map(Number)
+  const b = v2.split('.').map(Number)
+  const len = Math.max(a.length, b.length)
+  for (let i = 0; i < len; i++) {
+    const num1 = a[i] || 0
+    const num2 = b[i] || 0
+    if (num1 > num2) return 1
+    if (num1 < num2) return -1
+  }
+  return 0
+}
 </script>
 
 <template>
@@ -453,11 +479,11 @@ const openGitHubRepo = () => {
                 <span class="settings-title">{{ $t('settings.globalSettings.buttonDisplay') }}</span>
                 <n-checkbox style="line-height: 1;" v-model:checked="data.settings.showIcon">{{
                   $t('settings.globalSettings.showIcon') }}</n-checkbox>
-                <div style="display:flex;width: 240px;align-items: center;">
+                <div style="display:flex;width: 100%;align-items: center;">
                   <n-checkbox style="line-height: 1;" v-model:checked="data.settings.showLabel">{{
                     $t('settings.globalSettings.showText') }}</n-checkbox>
-                  <n-select style="width:128px" v-model:value="data.settings.showLabelLength"
-                    :options="[{ value: '1', label: '显示前1个字' }, { value: '2', label: '显示前2个字' }, { value: 'all', label: '显示全部' }]"
+                  <n-select style="width:200px" v-model:value="data.settings.showLabelLength"
+                    :options="[{ value: '1', label: $t('settings.globalSettings.show1') }, { value: '2', label: $t('settings.globalSettings.show2') }, { value: 'all', label: $t('settings.globalSettings.showAll') }]"
                     size="tiny">
                   </n-select>
                 </div>
@@ -474,7 +500,8 @@ const openGitHubRepo = () => {
                     <n-button style="margin-left:8px" :ghost="bst === 'ghost'" :secondary="bst === 'secondary'"
                       :tertiary="bst === 'tertiary'" :quaternary="bst === 'quaternary'" :text="bst === 'text'"
                       :size="buttonSizeString" :color="data.settings.color.main">
-                      <span v-if="data.settings.showLabel">{{ openBarHelper.getLabel(data.settings.showLabelLength, $t('settings.globalSettings.sample')) }}</span>
+                      <span v-if="data.settings.showLabel">{{ openBarHelper.getLabel(data.settings.showLabelLength,
+                        $t('settings.globalSettings.sample')) }}</span>
                       <template #icon>
                         <svg-icon v-if="data.settings.showIcon" type="mdi" :path="mdi['mdiAlphaEBox']"></svg-icon>
                       </template>
@@ -492,7 +519,8 @@ const openGitHubRepo = () => {
                     <n-radio :key="bst" :value="bst"></n-radio>
                     <n-button style="margin-left:8px" ghost :round="bst === 'round'" :circle="bst === 'circle'"
                       :size="buttonSizeString" :color="data.settings.color.main">
-                      <span v-if="data.settings.showLabel">{{ openBarHelper.getLabel(data.settings.showLabelLength, $t('settings.globalSettings.sample'))  }}</span>
+                      <span v-if="data.settings.showLabel">{{ openBarHelper.getLabel(data.settings.showLabelLength,
+                        $t('settings.globalSettings.sample')) }}</span>
                       <template #icon>
                         <svg-icon v-if="data.settings.showIcon" type="mdi" :path="mdi['mdiAlphaEBox']"></svg-icon>
                       </template>
@@ -569,13 +597,22 @@ const openGitHubRepo = () => {
         <n-tab-pane name="setting3" :tab="$t('settings.about.title')">
           <div style="display: flex;flex-direction: column;align-items: center;height: 100%;">
             <animation-container delay="0" style="font-size: 32px;font-weight: bold;">openbar</animation-container>
-            <animation-container delay="100">{{ pkg.version }}</animation-container>
+            <animation-container delay="100">
+              <div style="display: flex;align-items: center;">
+                {{ pkg.version }}
+                <n-button size="small" text @click="checkUpdate" style="margin-left: 8px;">
+                  <template #icon>
+                    <svg-icon type="mdi" :path="mdi.mdiUpdate"></svg-icon>
+                  </template>
+                </n-button>
+              </div>
+            </animation-container>
             <animation-container delay="200">
               <animation-container2 maskStart="left" style="margin-top: 32px;">Author: WL</animation-container2>
             </animation-container>
-            <animation-container delay="300">
-              <animation-container2 maskStart="left" style="margin-top: 4px;">
-                <n-button size="small" round ghost @click="openGitHubRepo">
+            <animation-container delay="300" style="margin-top: 4px;">
+              <animation-container2 maskStart="left">
+                <n-button size="small" round ghost @click="openLinkInBrowser('https://github.com/xyh20180101/openbar')">
                   <template #icon>
                     <svg-icon type="mdi" :path="mdi.mdiGithub"></svg-icon>
                   </template>
@@ -584,6 +621,18 @@ const openGitHubRepo = () => {
               </animation-container2>
             </animation-container>
           </div>
+          <n-modal v-model:show="showUpdate">
+            <n-dialog :title="$t('settings.globalSettings.update')" :content="$t('settings.globalSettings.isUpdate')"
+              :negative-text="$t('settings.globalSettings.cancel')"
+              :positive-text="$t('settings.globalSettings.confirm')" @close="showUpdate = false"
+              @positive-click="openLinkInBrowser('https://github.com/xyh20180101/openbar/releases'); showUpdate = false"
+              @negative-click="showUpdate = false" :negativeButtonProps="{ round: true }" :positiveButtonProps="{ round: true }" />
+          </n-modal>
+          <n-modal v-model:show="showNoUpdate">
+            <n-dialog :title="$t('settings.globalSettings.update')" :content="$t('settings.globalSettings.isNoUpdate')"
+              :negative-text="$t('settings.globalSettings.cancel')" @close="showNoUpdate = false"
+              @negative-click="showNoUpdate = false" :negativeButtonProps="{ round: true }" />
+          </n-modal>
         </n-tab-pane>
       </n-tabs>
     </n-modal-provider>
