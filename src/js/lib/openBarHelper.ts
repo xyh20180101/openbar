@@ -59,7 +59,10 @@ class OpenBarHelper {
             cache = lsCache === null ? null : JSON.parse(lsCache)
         }
 
-        return cache !== null ? cache : {
+        if(cache !== null)
+            return cache
+        
+        const data = {
             nodeTree: [
                 {
                     key: 'default', label: '默认面板', children: [], type: 'panel', isVisible: true
@@ -87,13 +90,16 @@ class OpenBarHelper {
                 autoName: true
             }
         }
+
+        this.setData(data)
+        return data
     }
 
     setData(data: any) {
         //更新缓存
         if (this.isAeRuntime()) {
-            if (!fs.existsSync(this.getDataPath()))
-                fs.mkdirSync(os.homedir() + '\\.openbar')
+            if (!fs.existsSync(this.getDataDirectory()))
+                fs.mkdirSync(this.getDataDirectory())
 
             fs.writeFileSync(this.getDataPath(), JSON.stringify(data))
         } else {
