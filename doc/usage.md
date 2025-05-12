@@ -1,6 +1,6 @@
 # openbar 使用文档
 
-## 安装
+## 安装(windows)
 - 解压压缩包文件到`C:\Program Files (x86)\Common Files\Adobe\CEP\extensions`
 <div style="text-align: center;">
   <img src="usage_1.png" />
@@ -10,6 +10,13 @@
 <div style="text-align: center;">
   <img src="usage_2.png" />
 </div>
+
+- 在Ae首选项`脚本和表达式`中启用`允许脚本写入文件和访问网络`
+
+## 安装(macOS)
+- 解压压缩包文件到`/Library/Application Support/Adobe/CEP/extensions`
+- 在终端中输入`defaults write com.adobe.CSXS.11 PlayerDebugMode 1`
+- 在Ae首选项`脚本和表达式`中启用`允许脚本写入文件和访问网络`
 
 ## 数据安全
 - 本扩展不保证完全没有bug会导致项目数据丢失甚至损坏，请务必打开Ae的自动保存功能并经常手动备份重要的工程

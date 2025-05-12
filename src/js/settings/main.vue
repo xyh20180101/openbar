@@ -418,7 +418,7 @@ function compareVersions(v1, v2) {
 
 <template>
   <n-config-provider :theme="darkTheme" :theme-overrides="openBarHelper.naiveUITheme"
-    :style="{ backgroundColor: openBarHelper.isAeRuntime() ? 'transparent' : 'black' }">
+    :style="{ backgroundColor: openBarHelper.isAeRuntime() ? openBarHelper.aeBackgroundColor : 'black' }">
     <n-modal-provider>
       <n-tabs type="line" animated placement="left">
         <n-tab-pane name="setting1" :tab="$t('settings.buttonManagement.title')">

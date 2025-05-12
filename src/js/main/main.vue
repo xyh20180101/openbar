@@ -96,7 +96,7 @@ const renderDropdownLabel = (option: any) => {
 
 <template>
   <n-config-provider :theme="darkTheme" :theme-overrides="openBarHelper.naiveUITheme"
-    :style="{ backgroundColor: openBarHelper.isAeRuntime() ? 'transparent' : 'black' }"
+    :style="{ backgroundColor: openBarHelper.isAeRuntime() ? openBarHelper.aeBackgroundColor : 'black' }"
     @contextmenu="handleContextMenu">
     <div class="container"
       :style="{ flexDirection: data.settings.flexDirection, padding: `${data.settings.flexGap}px`, gap: `${data.settings.flexGap}px` }">

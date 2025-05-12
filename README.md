@@ -1,8 +1,11 @@
 # openbar
 一个 After Effects CEP 扩展，提供一组可自定义功能按钮的工具栏界面。
 
-## 支持版本
-After Effects 2021 以上
+## 兼容性
+- 系统：windows 10/11，macOS（intel）
+    - macOS （M）未进行测试，不确定是否支持
+- After Effects版本： 2021 以上
+- 提供语言：中文/English
 
 ## 功能支持
 - [x] 效果

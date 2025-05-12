@@ -1,11 +1,12 @@
-import { fs, os } from "./cep/node"
-import { csi, evalTS } from "./utils/bolt"
+import { fs, os, path } from "./cep/node"
+import { csi, evalTS, getAppBackgroundColor } from "./utils/bolt"
 import { CSEvent } from './cep/csinterface'
 import menuCommandData from '../lib/menuCommands/data.json'
 
 class OpenBarHelper {
 
     public aeLanguage = 'zh_CN'
+    public aeBackgroundColor = this.toRgbaColor(getAppBackgroundColor().rgb)
 
     constructor() {
         evalTS('getAeLanguage').then(result => this.aeLanguage = result)
@@ -32,11 +33,16 @@ class OpenBarHelper {
     }
 
     getDataDirectory() {
-        return os.homedir() + '\\.openbar'
+        return path.join(os.homedir(), '.openbar')
     }
 
     getDataPath() {
-        return this.getDataDirectory() + '\\data.json'
+        return path.join(this.getDataDirectory(), 'data.json')
+    }
+
+    toRgbaColor(appBackgroundColor: any) {
+        const clamp = (v: number) => Math.max(0, Math.min(255, Math.round(v)));
+        return `rgba(${clamp(appBackgroundColor.r)}, ${clamp(appBackgroundColor.g)}, ${clamp(appBackgroundColor.b)}, 1)`;
     }
 
     getLabel = (showLabelLength: any, label: string) => {
@@ -59,9 +65,9 @@ class OpenBarHelper {
             cache = lsCache === null ? null : JSON.parse(lsCache)
         }
 
-        if(cache !== null)
+        if (cache !== null)
             return cache
-        
+
         const data = {
             nodeTree: [
                 {
